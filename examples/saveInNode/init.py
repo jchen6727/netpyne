@@ -19,4 +19,6 @@ from cfg import cfg
 from netParams import netParams
 
 print("Starting sim ...")
-sim.createSimulateAnalyze(netParams, cfg)
+sim.createSimulate(netParams, cfg)
+sim.saveInNode()
+sim.analysis.plotData()
