@@ -19,4 +19,10 @@ from cfg import cfg
 from netParams import netParams
 
 print("Starting sim ...")
+<<<<<<< HEAD
 sim.createSimulateAnalyze(netParams, cfg)
+=======
+sim.createSimulateAnalyze(netParams, cfg)
+
+sim.checkOutput('M1detailed')
+>>>>>>> development

@@ -1,4 +1,28 @@
+# Version 0.9.3
+
+- Improved conversion from SONATA format, including 300 biophys cell example
+
+- Added saveCellConns, pt3dRelativeToCellLocation and invertedYCoord cfg options
+
+- Modified plotLFP and plotRatePSD to use Morlet wavelet for PSD calculation
+
+- Added lineWidth argument to some raster and lfp plots
+
+- Added shuffling test to granger causality functions
+
+- Fixed bug plotting traces with one fig per trace
+
+- Fixed bug in granger functions - required conversion to int 
+
+- Fixed bug in plotShape when cells sections not available
+
+- Return meaningful cell info via 'repr' and 'str' for pointCell, compartCell
+
+- Fixed spelling typos in documentation
+
 # Version 0.9.2
+
+- Support for saving simulation at intervals  
 
 - Improved Python cell template import so can read section names from a Python list or dict of sections
 
@@ -8,15 +32,19 @@
 
 - Updated RxD calcium buffering example
 
-- Added netClamp example 
+- Added netClamp example to re-simulate activity of single cell from network data
 
 - Added support for recording and plotting variable time step
+
+- Replaced spectrogram FFT method with Morlet wavelet method
+
+- Updated installation instructions
 
 - Added 'fontSize' argument to several plots
 
 - Fixed issue completing batches in Python 3
 
-- Fixed bug saving evol output file
+- Fixed bug saving evolutionary optimization batch output file
 
 - Fixed bug in plotShape()
 
