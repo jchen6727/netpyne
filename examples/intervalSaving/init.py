@@ -19,5 +19,5 @@ from cfg import cfg
 from netParams import netParams
 
 print("Starting sim ...")
-#Interval defines how often the sim data is saved
+# To simulate with an interval you can use intervalCreateSimulateAnalyze or define an interval under sim.cfg.intervalSave
 sim.intervalCreateSimulateAnalyze(netParams, cfg, interval=100) 

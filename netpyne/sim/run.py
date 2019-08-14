@@ -109,6 +109,21 @@ def runSim ():
             if sim.cfg.verbose: print('Using local dt.')
         except:
             if sim.cfg.verbose: 'Error Failed to use local dt.'
+            
+    if hasattr(sim.cfg, 'intervalSave') and sim.cfg.intervalSave:
+        import os
+        try:
+            if sim.rank==0:
+                if os.path.exists('temp'):
+                    for f in os.listdir('temp'):
+                        os.unlink('temp/{}'.format(f))
+                else:
+                    os.mkdir('temp')
+            sim.runSimWithIntervalFunc(sim.cfg.intervalSave, sim.intervalSave)
+            return
+        except:
+            pass
+            
     sim.pc.barrier()
     sim.timing('start', 'runTime')
     preRun()

@@ -22,6 +22,10 @@ from ..specs import Dict, ODict
 #------------------------------------------------------------------------------
 def gatherData (gatherLFP = True):
     from .. import sim
+    
+    if hasattr(sim.cfg, 'intervalSave') and sim.cfg.intervalSave:
+        sim.fileGather()
+        return
         
     sim.timing('start', 'gatherTime')
     ## Pack data from all hosts
