@@ -265,7 +265,7 @@ def gatherData (gatherLFP = True):
 #  Gathers simData from filess
 #------------------------------------------------------------------------------
 def fileGather (gatherLFP = True):
-    import os, pickle
+    import os, pickle, re
     from .. import sim
     
     sim.timing('start', 'gatherTime')
@@ -273,17 +273,20 @@ def fileGather (gatherLFP = True):
     # iterate through the saved files and concat their data
     fileData = Dict()
     if sim.rank == 0:
-        for f in os.listdir('temp'):
-            with open('temp/' + f, 'rb') as data:
-                temp = pickle.load(data)
-                for k in temp.keys():
-                    if k in fileData:
-                        if isinstance(temp[k], list):
-                            fileData[k] = fileData[k] + temp[k]
-                        elif isinstance(temp[k], dict):
-                            fileData[k].update(temp[k])
-                    else:
-                        fileData[k] = temp[k] 
+        dataFileFormat = re.compile('_data_\d+\.pkl$')
+        targetFolder = os.path.dirname(sim.cfg.filename)
+        for f in os.listdir(targetFolder):
+            if dataFileFormat.search(f):
+                with open(targetFolder + '/' + f, 'rb') as data:
+                    temp = pickle.load(data)
+                    for k in temp.keys():
+                        if k in fileData:
+                            if isinstance(temp[k], list):
+                                fileData[k] = fileData[k] + temp[k]
+                            elif isinstance(temp[k], dict):
+                                fileData[k].update(temp[k])
+                        else:
+                            fileData[k] = temp[k] 
 
     
     simDataVecs = ['spkt','spkid','stims']+list(sim.cfg.recordTraces.keys())

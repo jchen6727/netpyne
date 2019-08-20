@@ -247,7 +247,7 @@ def compactConnFormat():
 def intervalSave (t):
     from .. import sim
     from ..specs import Dict
-    import pickle
+    import pickle, os
     
     sim.pc.barrier()    
     
@@ -299,8 +299,18 @@ def intervalSave (t):
             sim.allSimData['spkt'], sim.allSimData['spkid'] = zip(*sorted(zip(sim.allSimData['spkt'], sim.allSimData['spkid']))) # sort spks
             sim.allSimData['spkt'], sim.allSimData['spkid'] = list(sim.allSimData['spkt']), list(sim.allSimData['spkid'])
 
-        name = 'temp/data_{:0.0f}.pkl'.format(t)
-        with open(name, 'wb') as f:
+        # create folder if missing
+        targetFolder = os.path.dirname(sim.cfg.filename)
+        if targetFolder and not os.path.exists(targetFolder):
+            try:
+                os.makedirs(targetFolder)
+            except OSError:
+                if not os.path.exists(targetFolder):
+                    print(' Could not create target folder: %s' % (targetFolder))        
+        
+        
+        filename = sim.cfg.filename + '_data_{:0.0f}.pkl'.format(t)
+        with open(filename, 'wb') as f:
             pickle.dump(dict(sim.allSimData), f, protocol=2)
 
         # clean to avoid mem leaks
