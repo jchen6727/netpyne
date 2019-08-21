@@ -275,6 +275,7 @@ def fileGather (gatherLFP = True):
     if sim.rank == 0:
         dataFileFormat = re.compile('_data_\d+\.pkl$')
         targetFolder = os.path.dirname(sim.cfg.filename)
+        if targetFolder is '': targetFolder='.'
         for f in os.listdir(targetFolder):
             if dataFileFormat.search(f):
                 with open(targetFolder + '/' + f, 'rb') as data:
