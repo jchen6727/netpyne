@@ -14,6 +14,7 @@ except NameError:
     basestring = str
 
 from future import standard_library
+
 standard_library.install_aliases()
 from netpyne import __gui__
 
@@ -26,7 +27,19 @@ from .utils import exception, _showFigure, _saveFigData
 ## Plot RxD concentration
 # -------------------------------------------------------------------------------------------------------------------
 @exception
-def plotRxDConcentration(speciesLabel, regionLabel, plane='xy', figSize=(5,10), clim=None, fontSize=10, scalebar=False, title=True, showFig=True, saveFig=True, **kwargs):
+def plotRxDConcentration(
+    speciesLabel,
+    regionLabel,
+    plane="xy",
+    figSize=(5, 10),
+    clim=None,
+    fontSize=10,
+    scalebar=False,
+    title=True,
+    showFig=True,
+    saveFig=True,
+    **kwargs
+):
     """
     Function to plot reaction-diffusion concentrations
 
@@ -78,24 +91,22 @@ def plotRxDConcentration(speciesLabel, regionLabel, plane='xy', figSize=(5,10), 
 
     """
 
-
-
     from .. import sim
 
-    print('Plotting RxD concentration ...')
+    print("Plotting RxD concentration ...")
 
     # set font size
-    plt.rcParams.update({'font.size': fontSize})
+    plt.rcParams.update({"font.size": fontSize})
 
-    species = sim.net.rxd['species'][speciesLabel]['hObj']
-    region = sim.net.rxd['regions'][regionLabel]['hObj']
-    plane2mean = {'xz': 1, 'xy': 2}
+    species = sim.net.rxd["species"][speciesLabel]["hObj"]
+    region = sim.net.rxd["regions"][regionLabel]["hObj"]
+    plane2mean = {"xz": 1, "xy": 2}
 
     extent = []
-    extent.append(sim.net.rxd['regions'][regionLabel][plane[0] + 'lo'])
-    extent.append(sim.net.rxd['regions'][regionLabel][plane[0] + 'hi'])
-    extent.append(sim.net.rxd['regions'][regionLabel][plane[1] + 'lo'])
-    extent.append(sim.net.rxd['regions'][regionLabel][plane[1] + 'hi'])
+    extent.append(sim.net.rxd["regions"][regionLabel][plane[0] + "lo"])
+    extent.append(sim.net.rxd["regions"][regionLabel][plane[0] + "hi"])
+    extent.append(sim.net.rxd["regions"][regionLabel][plane[1] + "lo"])
+    extent.append(sim.net.rxd["regions"][regionLabel][plane[1] + "hi"])
 
     vmin = None
     vmax = None
@@ -104,46 +115,53 @@ def plotRxDConcentration(speciesLabel, regionLabel, plane='xy', figSize=(5,10), 
         vmax = clim[1]
 
     fig = plt.figure(figsize=figSize)
-    plt.imshow(species[region].states3d[:].mean(plane2mean[plane]).T, interpolation='nearest', origin='upper', extent=extent, vmin=vmin, vmax=vmax)
+    plt.imshow(
+        species[region].states3d[:].mean(plane2mean[plane]).T,
+        interpolation="nearest",
+        origin="upper",
+        extent=extent,
+        vmin=vmin,
+        vmax=vmax,
+    )
     import numpy as np
-    print('  min:', np.min(species[region].states3d[:].mean(plane2mean[plane]).T))
-    print('  max:', np.max(species[region].states3d[:].mean(plane2mean[plane]).T))
 
-
+    print("  min:", np.min(species[region].states3d[:].mean(plane2mean[plane]).T))
+    print("  max:", np.max(species[region].states3d[:].mean(plane2mean[plane]).T))
 
     ax = plt.gca()
     if scalebar:
         ax.xaxis.set_visible(False)
         ax.yaxis.set_visible(False)
         sb = ScaleBar(1e-6)
-        sb.location = 'lower left'
+        sb.location = "lower left"
         ax.add_artist(sb)
 
-    cb = plt.colorbar(label='[' + species.name + '] (mM)')
-    plt.xlabel(plane[0] + ' location (um)')
-    plt.ylabel(plane[1] + ' location (um)')
-    
-    if saveFig == 'movie':
+    cb = plt.colorbar(label="[" + species.name + "] (mM)")
+    plt.xlabel(plane[0] + " location (um)")
+    plt.ylabel(plane[1] + " location (um)")
+
+    if saveFig == "movie":
         from neuron import h
-        cb.ax.set_title('Time = ' + str(round(h.t, 1)), fontsize=fontSize)
+
+        cb.ax.set_title("Time = " + str(round(h.t, 1)), fontsize=fontSize)
 
     if title:
-        plt.title('RxD: ' + species.name +  ' concentration')
+        plt.title("RxD: " + species.name + " concentration")
     plt.tight_layout()
 
     # show fig
-    if showFig: _showFigure()
+    if showFig:
+        _showFigure()
 
     # save figure
     if saveFig:
         if isinstance(saveFig, basestring):
-            if saveFig == 'movie':
-                filename = sim.cfg.filename + '_rxd_concentration_movie_' + str(round(h.t, 1)) + '.png'
+            if saveFig == "movie":
+                filename = sim.cfg.filename + "_rxd_concentration_movie_" + str(round(h.t, 1)) + ".png"
             else:
                 filename = saveFig
         else:
-            filename = sim.cfg.filename + '_rxd_concentration.png'
+            filename = sim.cfg.filename + "_rxd_concentration.png"
         plt.savefig(filename)
 
-    return fig, {'data': species[region].states3d[:].mean(plane2mean[plane])}
-
+    return fig, {"data": species[region].states3d[:].mean(plane2mean[plane])}

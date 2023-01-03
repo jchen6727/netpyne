@@ -3,7 +3,7 @@
 import matplotlib.patches as mpatches
 import matplotlib.pyplot as plt
 import math
-from ..analysis.utils import exception #, loadData
+from ..analysis.utils import exception  # , loadData
 from ..analysis.tools import loadData
 from .plotter import LinesPlotter
 from .plotter import ImagePlotter
@@ -15,77 +15,78 @@ import numpy as np
 @exception
 def plotLFPPSD(
     PSDData=None,
-    axis=None,     
+    axis=None,
     timeRange=None,
-    electrodes=['avg', 'all'],
-    pop=None, 
+    electrodes=["avg", "all"],
+    pop=None,
     separation=1.0,
     roundOffset=True,
     NFFT=256,
-    noverlap=128, 
+    noverlap=128,
     nperseg=256,
-    minFreq=1, 
-    maxFreq=100, 
-    stepFreq=1, 
+    minFreq=1,
+    maxFreq=100,
+    stepFreq=1,
     smooth=0,
-    logy=False, 
+    logy=False,
     normSignal=False,
-    normPSD=False, 
-    filtFreq=False, 
-    filtOrder=3, 
-    detrend=False, 
-    transformMethod='morlet',
+    normPSD=False,
+    filtFreq=False,
+    filtOrder=3,
+    detrend=False,
+    transformMethod="morlet",
     orderInverse=True,
     legend=True,
     colorList=None,
     returnPlotter=False,
-    **kwargs):
+    **kwargs
+):
     """Function to produce a line plot of LFP electrode signals
 
     NetPyNE Options
     ---------------
     sim : NetPyNE sim object
         The *sim object* from which to get data.
-        
+
         *Default:* ``None`` uses the current NetPyNE sim object
 
     Parameters
     ----------
     PSDData : dict, str
-        The data necessary to plot the LFP PSD. 
+        The data necessary to plot the LFP PSD.
 
         *Default:* ``None`` uses ``analysis.preparePSD`` to produce ``PSDData`` using the current NetPyNE sim object.
-        
+
         If a *str* it must represent a file path to previously saved data.
-        
+
     axis : matplotlib axis
         The axis to plot into, allowing overlaying of plots.
-        
+
         *Default:* ``None`` produces a new figure and axis.
 
     timeRange : list
         Time range to include in the raster: ``[min, max]``.
-        
+
         *Default:* ``None`` uses the entire simulation
 
     electrodes : list
         A *list* of the electrodes to plot from.
-        
+
         *Default:* ``['avg', 'all']`` plots each electrode as well as their average
 
     pop : str
         A population name to calculate PSD from.
-        
+
         *Default:* ``None`` uses all populations.
 
     separation : float
         Use to increase or decrease distance between signals on the plot.
-    
+
         *Default:* ``1.0``
 
     roundOffset : bool
         Attempts to line up PSD signals with gridlines
-    
+
         *Default:* ``True``
 
     NFFT : int (power of 2)
@@ -119,8 +120,8 @@ def plotLFPPSD(
     logy : bool
         Whether to use a log axis.
 
-        *Default:* ``False`` 
-    
+        *Default:* ``False``
+
     normSignal : bool
         Whether to normalize the LFP data.
 
@@ -133,13 +134,13 @@ def plotLFPPSD(
 
     filtFreq : int or list
         Frequency for low-pass filter (int) or frequencies for bandpass filter in a list: [low, high]
-        
+
         *Default:* ``None`` does not filter the data
 
     filtOrder : int
         Order of the filter defined by `filtFreq`.
 
-        *Default:* ``3``    
+        *Default:* ``3``
 
     detrend : bool
         Whether to detrend the data.
@@ -149,7 +150,7 @@ def plotLFPPSD(
     transformMethod : str
         The transformation method to use, either 'morlet' or 'fft'.
 
-        *Default:* ``'morlet'`` 
+        *Default:* ``'morlet'``
 
     orderInverse : bool
         Whether to invert the order of plotting.
@@ -158,17 +159,17 @@ def plotLFPPSD(
 
     legend : bool
         Whether or not to add a legend to the plot.
-        
+
         *Default:* ``True`` adds a legend.
 
     colorList : list
         A *list* of colors to draw from when plotting.
-        
+
         *Default:* ``None`` uses the default NetPyNE colorList.
 
     returnPlotter : bool
         Whether to return the figure or the NetPyNE MetaFig object.
-        
+
         *Default:* ``False`` returns the figure.
 
 
@@ -199,10 +200,10 @@ def plotLFPPSD(
 
     title : str
         the axis title
-    
+
     xlabel : str
         label for x-axis
-    
+
     ylabel : str
         label for y-axis
 
@@ -212,83 +213,82 @@ def plotLFPPSD(
     alpha : float
         line opacity (0-1)
 
-    
+
     Returns
     -------
     LFPPSDPlot : *matplotlib figure*
         By default, returns the *figure*.  If ``returnPlotter`` is ``True``, instead returns the NetPyNE MetaFig.
-        
-    """
 
+    """
 
     # If there is no input data, get the data from the NetPyNE sim object
     if PSDData is None:
-        if 'sim' not in kwargs:
+        if "sim" not in kwargs:
             from .. import sim
         else:
-            sim = kwargs['sim']
+            sim = kwargs["sim"]
 
         PSDData = sim.analysis.preparePSD(
-            PSDData=PSDData, 
+            PSDData=PSDData,
             sim=sim,
             timeRange=timeRange,
             electrodes=electrodes,
             pop=pop,
             NFFT=NFFT,
-            noverlap=noverlap, 
-            nperseg=nperseg, 
-            minFreq=minFreq, 
-            maxFreq=maxFreq, 
-            stepFreq=stepFreq, 
-            smooth=smooth, 
-            logy=logy, 
-            normSignal=normSignal, 
-            normPSD=normPSD, 
-            filtFreq=filtFreq, 
-            filtOrder=filtOrder, 
-            detrend=detrend, 
+            noverlap=noverlap,
+            nperseg=nperseg,
+            minFreq=minFreq,
+            maxFreq=maxFreq,
+            stepFreq=stepFreq,
+            smooth=smooth,
+            logy=logy,
+            normSignal=normSignal,
+            normPSD=normPSD,
+            filtFreq=filtFreq,
+            filtOrder=filtOrder,
+            detrend=detrend,
             transformMethod=transformMethod,
             **kwargs
-            )
+        )
 
-    print('Plotting LFP power spectral density (PSD)...')
+    print("Plotting LFP power spectral density (PSD)...")
 
     # If input is a dictionary, pull the data out of it
     if type(PSDData) == dict:
-    
-        freqs = PSDData['psdFreqs']
+
+        freqs = PSDData["psdFreqs"]
         freq = freqs[0]
-        psds = PSDData['psdSignal']
-        names = PSDData['psdNames']
-        colors = PSDData.get('colors')
-        linewidths = PSDData.get('linewidths')
-        alphas = PSDData.get('alphas')
-        axisArgs = PSDData.get('axisArgs')
+        psds = PSDData["psdSignal"]
+        names = PSDData["psdNames"]
+        colors = PSDData.get("colors")
+        linewidths = PSDData.get("linewidths")
+        alphas = PSDData.get("alphas")
+        axisArgs = PSDData.get("axisArgs")
 
     # Set up colors, linewidths, and alphas for the plots
     if not colors:
         if not colorList:
             from .plotter import colorList
-        colors = colorList[0:len(psds)]
+        colors = colorList[0 : len(psds)]
 
     if not linewidths:
         linewidths = [1.0 for name in names]
 
     if not alphas:
         alphas = [1.0 for name in names]
-    
+
     # Create a dictionary to hold axis inputs
     if not axisArgs:
         axisArgs = {}
-        title = 'LFP Power Spectral Density'
+        title = "LFP Power Spectral Density"
         if pop:
-            title += ' - Population: ' + pop
-        axisArgs['title'] = title
-        axisArgs['xlabel'] = 'Frequency (Hz)'
-        axisArgs['ylabel'] = 'Power (mVˆ2 / Hz )'
+            title += " - Population: " + pop
+        axisArgs["title"] = title
+        axisArgs["xlabel"] = "Frequency (Hz)"
+        axisArgs["ylabel"] = "Power (mVˆ2 / Hz )"
 
-    if axis != 'multi':
-        axisArgs['grid'] = {'which': 'both'}
+    if axis != "multi":
+        axisArgs["grid"] = {"which": "both"}
 
     # Link colors to traces, make avg plot black, add separation to traces
     plotColors = []
@@ -296,7 +296,7 @@ def plotLFPPSD(
     colorIndex = 0
     offset = np.absolute(psds).max() * separation
 
-    if axis == 'multi':
+    if axis == "multi":
         offset = 0
         roundOffset = False
 
@@ -305,30 +305,30 @@ def plotLFPPSD(
         if type(roundOffset) == int:
             sigfigs = roundOffset
         offset = round(offset, sigfigs - int(math.floor(math.log10(abs(offset)))) - 1)
-    
+
     for index, (name, psd) in enumerate(zip(names, psds)):
         legendLabels.append(name)
         if orderInverse:
             psds[index] = index * offset - psd
-            axisArgs['invert_yaxis'] = True
+            axisArgs["invert_yaxis"] = True
         else:
             psds[index] = index * offset + psd
-        if name == 'avg':
-            plotColors.append('black')
+        if name == "avg":
+            plotColors.append("black")
         else:
             plotColors.append(colors[colorIndex])
             colorIndex += 1
 
     # Create a dictionary with the inputs for a line plot
     linesData = {}
-    linesData['x'] = freq
-    linesData['y'] = psds
-    linesData['color'] = plotColors
-    linesData['marker'] = None
-    linesData['markersize'] = None
-    linesData['linewidth'] = None
-    linesData['alpha'] = None
-    linesData['label'] = legendLabels
+    linesData["x"] = freq
+    linesData["y"] = psds
+    linesData["color"] = plotColors
+    linesData["marker"] = None
+    linesData["markersize"] = None
+    linesData["linewidth"] = None
+    linesData["alpha"] = None
+    linesData["label"] = legendLabels
 
     # If a kwarg matches a lines input key, use the kwarg value instead of the default
     for kwarg in list(kwargs.keys()):
@@ -337,10 +337,10 @@ def plotLFPPSD(
             kwargs.pop(kwarg)
 
     # create Plotter object
-    if axis != 'multi':
-        plotter = LinesPlotter(data=linesData, kind='LFPPSD', axis=axis, **axisArgs, **kwargs)
+    if axis != "multi":
+        plotter = LinesPlotter(data=linesData, kind="LFPPSD", axis=axis, **axisArgs, **kwargs)
     else:
-        plotter = MultiPlotter(data=linesData, kind='LFPPSD', metaFig=None, **axisArgs, **kwargs)
+        plotter = MultiPlotter(data=linesData, kind="LFPPSD", metaFig=None, **axisArgs, **kwargs)
 
     metaFig = plotter.metafig
 
@@ -349,17 +349,17 @@ def plotLFPPSD(
 
     # Set up the default legend settings
     legendKwargs = {}
-    legendKwargs['title'] = 'Electrodes'
-    #legendKwargs['bbox_to_anchor'] = (1.025, 1)
-    legendKwargs['loc'] = 'upper right'
-    #legendKwargs['borderaxespad'] = 0.0
-    #legendKwargs['handlelength'] = 0.5
-    legendKwargs['fontsize'] = 'small'
-    legendKwargs['title_fontsize'] = 'small'
-    
+    legendKwargs["title"] = "Electrodes"
+    # legendKwargs['bbox_to_anchor'] = (1.025, 1)
+    legendKwargs["loc"] = "upper right"
+    # legendKwargs['borderaxespad'] = 0.0
+    # legendKwargs['handlelength'] = 0.5
+    legendKwargs["fontsize"] = "small"
+    legendKwargs["title_fontsize"] = "small"
+
     # add the legend
     if legend:
-        axisArgs['legend'] = legendKwargs
+        axisArgs["legend"] = legendKwargs
 
     # Generate the figure
     PSDPlot = plotter.plot(**axisArgs, **kwargs)
