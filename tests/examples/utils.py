@@ -22,7 +22,7 @@ def pkg_setup(request):
         raise Exception('Missing package name')
     pkg, subdir = mark.args[0]
     cwd = os.getcwd()
-    os.chdir(pkg)
+    os.chdir('../'+pkg)
     if subdir:
         compile_neuron_mod_dir(subdir)
     sys.path.append('.')

@@ -63,3 +63,15 @@ examples/asdOptim/simple/
 *.pid
 
 examples/optunaOptim/simple/
+
+examples/HHTut/HHTut_data.json
+
+examples/HHTut/HHTut_data.pkl
+
+examples/HHTut/HHTut_raster.png
+
+examples/HHTut/HHTut_spike_data.pkl
+
+examples/NeuroMLImport/SimpleNet_data.json
+
+examples/PTcell/PTcell_data.json

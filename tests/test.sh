@@ -2,8 +2,12 @@
 
 set -e 
 set -o pipefail
-
-for entry in tests/*/test_*
+# example test directories.
+#   ...   in ./*/test_*
+#   ...   in ./doc/test_*
+#   ...   in ./examples/test_*
+#   ...   in ./unit/test_*
+for entry in ./examples/test_*
 do
   # Tests have to run separately bc of the NEURON package linking
   echo "Testing $entry"
