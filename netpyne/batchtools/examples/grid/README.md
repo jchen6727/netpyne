@@ -1,6 +1,3 @@
-The currently open file is the top-level `README.md` for the whole NetPyNE project — not the grid example's `README.md`. I'll write the content to the correct file at `netpyne/batchtools/examples/grid/README.md` instead:
-
-```markdown
 # Grid Search Example
 
 This example demonstrates a parameter grid search using `batchtk`'s `Trial` API, running trials concurrently via `ThreadPoolExecutor`.
@@ -153,7 +150,6 @@ python grid.py
 
 
 Results are stored in `output/rosenbrock.sqlite.db` and printed to stdout.
-```
-```
-```
+
+
 
