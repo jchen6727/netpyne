@@ -1,0 +1,11 @@
+command_template = "sh {output_path}.sh"
+
+script_template = """\
+#!/bin/bash
+
+{handles}
+{env}
+
+cd {project_dir}
+python rosenbrock.py
+"""
